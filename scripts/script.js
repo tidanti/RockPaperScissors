@@ -1,10 +1,37 @@
 function playRound(computerSelect, playerSelect) {
     // 0 - rock; 1 - paper; 2 - scissors
-     
+    if ((computerSelect === 0 && playerSelect === 0) ||
+            (computerSelect === 1 && playerSelect === 1) ||
+            (computerSelect === 2 && playerSelect === 2)) {
+                
+                return "nobody";
+    } else if ((computerSelect === 0 && playerSelect === 1) ||
+            (computerSelect === 1 && playerSelect === 2) ||
+            (computerSelect === 2 && playerSelect === 0)) {
+
+                return "player";
+    } else {
+        return "computer";
+    }
 }
 
-function getGameResult(finalScore) {
+function getWinner(computerScores, playerScores) {
+    if (computerScores > playerScores) {
+        return "Computer";
+    } else if (computerScores < playerScores) {
+        return "Player";
+    } else {
+        return "draw";
+    }
+}
 
+function showGameResult(winner, winnerScores = 0, looserScores = 0) {
+    console.log(winner + " wins!");
+    //console.log(winnerScores + " against " + looserScores + "!");
+}
+
+function showDrawGameResult(finalScores) {
+    console.log("Draw! Each player has " + finalScores + " scores.");
 }
 
 function showWinMessage(computerSelect, playerSelect) {
@@ -25,6 +52,15 @@ function showLooseMessage(computerSelect, playerSelect) {
     console.log(winMessage);
 }
 
+function showDrawMessage() {
+    console.log("Draw!");
+}
+
+function showScores(computerScores, playerScores) {
+    console.log("Player's scores: " + playerScores);
+    console.log("Computer's scores: " + computerScores);
+}
+
 function showErrorMessage(errorType = "") {
     if (errorType === "") {
         console.log("Sorry, something has gone wrong... :(");
@@ -34,7 +70,8 @@ function showErrorMessage(errorType = "") {
 }
 
 function showWelcomeMessage() {
-    console.log("Welcome to the RockPaperScissors game!");
+    console.log("Welcome to the RockPaperScissors game!" +
+            "You'll play 4 round against computer.");
 }
 
 function getStringMoveValue(moveValue) {
@@ -44,31 +81,44 @@ function getStringMoveValue(moveValue) {
             break;
         case 1:
             return "Paper";
+            break;
         case 2:
             return "Scissors";
+            break;
         default:
             return "err";
     }
 }
 
 function getPlayerSelectInNumber(playerSelect) {
-    if (playerSelect === "" || playerSelect === undefined || playerSelect === null) {
-
+    switch(playerSelect) {
+        case "rock":
+            return 0;
+            break;
+        case "paper":
+            return 1;
+            break;
+        case "scissors":
+            return 2;
+            break;
+        default:
+            return "err";
     }
-    
-    playerSelect = playerSelect.toLowerCase();
-
 }
 
 function checkPlayerSelect(playerSelect) {
-    if (playerSelect === "" || playerSelect === undefined || playerSelect === null) {
-        return "err";
+    if (playerSelect === "" || playerSelect === undefined ||
+            playerSelect === null) {
+                
+                return "err";
     } else {
         playerSelect = playerSelect.toLowerCase();
     }
 
-    if (playerSelect != "rock" && playerSelect != "paper" && playerSelect != "scissors") {
-        return "err";
+    if (playerSelect != "rock" && playerSelect != "paper" &&
+            playerSelect != "scissors") {
+        
+                return "err";
     } else {
         return playerSelect;
     }
@@ -85,25 +135,70 @@ function playerPlay() {
 }
 
 function mainGame() {
-    showWelcomeMessage();
-    let finalScore = 0;
+    // error consts
+    const INPUT_ERROR = "wrongInput";
 
-    for (let i = 1; i <= 5; i++) {
+    showWelcomeMessage();
+    let finalPlayerScore = 0;
+    let finalComputerScore = 0;
+
+    for (let i = 1; i <= 4; i++) {
+
+        // PLAYER'S MOVE SECTION
         let playerMove = checkPlayerSelect(playerPlay());
 
         if (playerMove === "err") {
-
+            showErrorMessage(INPUT_ERROR);
+            console.log("Enter your choice again!");
+            i--;
+            continue;
         } else {
             playerMove = getPlayerSelectInNumber(playerMove);
         }
 
-        let computerMove = computerPlay();
+        if (playerMove === "err") {
+            showErrorMessage();
+            console.log("Try again...");
+            i--;
+            continue;
+        }
+        // END OF PLAYER'S MOVE SECTION
 
-        let playerWins = playRound(computerMove, playerMove);
-        if (playerWins) {
-            finalScore++;
+        let computerMove = computerPlay();
+        
+        let playerMoveInString = getStringMoveValue(playerMove);
+        let computerMoveInString = getStringMoveValue(computerMove);
+
+        if (playerMoveInString === "err" || computerMoveInString === "err") {
+            showErrorMessage();
+            console.log("Try again...");
+            i--;
+            continue;
+        }
+
+        let winnerInThisRound = playRound(computerMove, playerMove);
+        if (winnerInThisRound === "player") {
+            finalPlayerScore++;
+            showWinMessage(computerMoveInString, playerMoveInString);
+            showScores(finalComputerScore, finalPlayerScore);
+        } else if (winnerInThisRound === "computer") {
+            finalComputerScore++;
+            showLooseMessage(computerMoveInString, playerMoveInString);
+            showScores(finalComputerScore, finalPlayerScore);
+        } else {
+            finalPlayerScore++;
+            finalComputerScore++;
+            showDrawMessage();
+            showScores(finalComputerScore, finalPlayerScore);
         }
     }
     
-    getGameResult(finalScore);
+    let winner = getWinner(finalComputerScore, finalPlayerScore);
+    if (winner != "draw") {
+        showDrawGameResult(winner);
+    } else {
+        showDrawGameResult(finalPlayerScore);
+    }
 }
+
+mainGame();
