@@ -26,12 +26,12 @@ function getWinner(computerScores, playerScores) {
 }
 
 function showGameResult(winner, winnerScores = 0, looserScores = 0) {
-    console.log(winner + " wins!");
-    //console.log(winnerScores + " against " + looserScores + "!");
+    alert(winner + " wins!");
+    //alert(winnerScores + " against " + looserScores + "!");
 }
 
 function showDrawGameResult(finalScores) {
-    console.log("Draw! Each player has " + finalScores + " scores.");
+    alert("Draw! Each player has " + finalScores + " scores.");
 }
 
 function showWinMessage(computerSelect, playerSelect) {
@@ -40,7 +40,7 @@ function showWinMessage(computerSelect, playerSelect) {
     }
     
     let winMessage = "You won! " + playerSelect + " beats " + computerSelect + "! =)";
-    console.log(winMessage);
+    alert(winMessage);
 }
 
 function showLooseMessage(computerSelect, playerSelect) {
@@ -49,28 +49,28 @@ function showLooseMessage(computerSelect, playerSelect) {
     }
 
     let looseMessage = "You lost! " + computerSelect + " beats " + playerSelect + "! =(";
-    console.log(winMessage);
+    alert(looseMessage);
 }
 
 function showDrawMessage() {
-    console.log("Draw!");
+    alert("Draw!");
 }
 
 function showScores(computerScores, playerScores) {
-    console.log("Player's scores: " + playerScores);
-    console.log("Computer's scores: " + computerScores);
+    alert("Player's scores: " + playerScores);
+    alert("Computer's scores: " + computerScores);
 }
 
 function showErrorMessage(errorType = "") {
     if (errorType === "") {
-        console.log("Sorry, something has gone wrong... :(");
+        alert("Sorry, something has gone wrong... :(");
     } else if (errorType === "wrongInput") {
-        console.log("Wrong input!");
+        alert("Wrong input!");
     }
 }
 
 function showWelcomeMessage() {
-    console.log("Welcome to the RockPaperScissors game!" +
+    alert("Welcome to the RockPaperScissors game!" +
             "You'll play 4 round against computer.");
 }
 
@@ -149,7 +149,7 @@ function mainGame() {
 
         if (playerMove === "err") {
             showErrorMessage(INPUT_ERROR);
-            console.log("Enter your choice again!");
+            alert("Enter your choice again!");
             i--;
             continue;
         } else {
@@ -158,7 +158,7 @@ function mainGame() {
 
         if (playerMove === "err") {
             showErrorMessage();
-            console.log("Try again...");
+            alert("Try again...");
             i--;
             continue;
         }
@@ -171,7 +171,7 @@ function mainGame() {
 
         if (playerMoveInString === "err" || computerMoveInString === "err") {
             showErrorMessage();
-            console.log("Try again...");
+            alert("Try again...");
             i--;
             continue;
         }
@@ -195,7 +195,7 @@ function mainGame() {
     
     let winner = getWinner(finalComputerScore, finalPlayerScore);
     if (winner != "draw") {
-        showDrawGameResult(winner);
+        showGameResult(winner);
     } else {
         showDrawGameResult(finalPlayerScore);
     }
